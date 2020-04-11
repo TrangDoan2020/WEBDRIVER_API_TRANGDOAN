@@ -15,8 +15,8 @@ public class Buoi03_LocateByXpath {
         driver.get("https://facebook.com");
 
         //Tìm element của Email và Pass bằng Xpath - cách 1
-        WebElement eleEmail = driver.findElement(By.xpath("//input[@id='email']"));
-        WebElement elePass = driver.findElement(By.xpath("//input[@id='pass']"));
+        WebElement txtEmail = driver.findElement(By.xpath("//input[@id='email']"));
+        WebElement txtPass = driver.findElement(By.xpath("//input[@id='pass']"));
 
         //Tìm element của Email và Pass bằng Xpath - cách 2
         //driver.findElement(By.xpath("//input[@name='email']")).sendKeys("tester01gm@gmail.com");
@@ -24,11 +24,11 @@ public class Buoi03_LocateByXpath {
 
         //Tìm element của nút Đăng ký (giả sử ko có các thuộc tính)
         WebElement btnRegister = driver.findElement(By.xpath("//button[text()='Đăng ký']"));
-        //btnRegister.click();
+        btnRegister.click();
 
         //Nhập dữ liệu cho field Email và Pass
-        eleEmail.sendKeys("tester01gm@gmail.com");
-        elePass.sendKeys("123456");
+        txtEmail.sendKeys("tester01gm@gmail.com");
+        txtPass.sendKeys("123456");
 
         //Đóng tab/window hiện tại của trình duyệt đang mở
         driver.close();

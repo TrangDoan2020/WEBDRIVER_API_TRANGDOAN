@@ -15,14 +15,14 @@ public class Buoi03_LocateByLinkText {
         driver.get("https://facebook.com");
 
         //Tìm element của link Quên tài khoản?
-        WebElement eleLink = driver.findElement(By.linkText("Quên tài khoản?"));
+        WebElement lnkForgot = driver.findElement(By.linkText("Quên tài khoản?"));
 
         //Lấy giá trị đường link và hiển thị giá trị đó ra màn hình console
-        String forgetUrl = eleLink.getAttribute("href");
+        String forgetUrl = lnkForgot.getAttribute("href");
         System.out.println(forgetUrl);
 
         //Click vào link Quên tài khoản?
-        eleLink.click();
+        lnkForgot.click();
 
         //Đóng tab/window hiện tại của trình duyệt đang mở
         driver.close();
