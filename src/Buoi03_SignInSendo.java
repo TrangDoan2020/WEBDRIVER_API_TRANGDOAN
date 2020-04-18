@@ -14,25 +14,43 @@ public class Buoi03_SignInSendo {
         //Truy cập vào trang sendo.vn
         driver.get("https://sendo.vn");
 
-        Thread.sleep(7000);
-        driver.findElement(By.xpath("//button[@class='close_3d2Y']")).click();
-        //Thread.sleep(1000);
+        //Chờ 12s
+        Thread.sleep(12000);
+
+        //// Tắt popup quảng cáo
+        driver.findElement(By.xpath("//div[@class='modal-content']/button[starts-with(@class,'close')]")).click();
+
+        //Tắt popup "Bật thông báo để không bỏ lỡ..."
         //driver.findElement(By.xpath("//button[@class='closeBtn_2s1w']")).click();
+        driver.findElement(By.xpath("//button[starts-with(@class,'closeBtn')]")).click();
 
-        //Tìm element của link Đăng nhập
-        //WebElement lnkSignin = driver.findElement(By.xpath("//span[contains(text(),'Đăng nhập')]"));
-        //lnkSignin.click();
+        //Click Đăng nhập
+        WebElement lnkSignin = driver.findElement(By.xpath("//span[contains(text(),'Đăng nhập')]"));
+        lnkSignin.click();
 
-        //WebElement lnkSendoID = driver.findElement(By.xpath("//span[contains(text(),'Đã có SendoID')]"));
-        //lnkSendoID.click();
+        //Chờ 1s
+        Thread.sleep(1000);
 
-        //WebElement txtEmail = driver.findElement(By.xpath("//input[@name='username']"));
-        //WebElement textPass = driver.findElement(By.xpath("//input[@name='password']"));
+        // Click link "Đã có SendoID"
+        WebElement lnkSendoID = driver.findElement(By.xpath("//span[text()='Đã có SendoID']"));
+        lnkSendoID.click();
 
-        //txtEmail.sendKeys("0938586131");
-        //textPass.sendKeys("123456@");
+        // Nhập textbox Email, Password
+        WebElement txtEmail = driver.findElement(By.xpath("//input[@name='username']"));
+        WebElement textPass = driver.findElement(By.xpath("//input[@name='password']"));
 
-       // driver.findElement(By.xpath("//button[@class='btnLogin_1eqO']")).click();
+        txtEmail.sendKeys("0909090909");
+        textPass.sendKeys("12345678");
+
+        // Click button Đăng nhập
+        driver.findElement(By.xpath("//button[starts-with(@class,'btnLogin')]")).click();
+
+        // Chờ 1s
+        Thread.sleep(2000);
+
+        // Get error text
+        String errorMsg = driver.findElement(By.xpath("//p[starts-with(@class,'error')]")).getText();
+        System.out.println(errorMsg);
 
         //Đóng tab/window hiện tại của trình duyệt đang mở
         driver.close();
