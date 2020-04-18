@@ -1,6 +1,7 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -14,12 +15,12 @@ public class Buoi04_HandleAjaxLoading {
         System.setProperty("webdriver.chrome.driver", projectPath + "/drivers/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
 
+        //Fluent Wait
         Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
-                .withTimeout(Duration.ofSeconds(10))
+                .withTimeout(Duration.ofSeconds(15))
                 .pollingEvery(Duration.ofSeconds(2))
                 .withMessage("Time out after 10 seconds")
                 .ignoring(NoSuchElementException.class);
-        //WebDriverWait wait = new WebDriverWait(driver,10);
 
         //Truy cập vào trang web
         driver.get("http://the-internet.herokuapp.com/dynamic_loading/2");
@@ -29,11 +30,11 @@ public class Buoi04_HandleAjaxLoading {
         //driver.findElement(By.xpath("//div[@id='start']")).click();
 
         //Chờ loading
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("div[@id='loading']")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='loading']")));
 
         //Hiển thị Hello World! sau khi loading xong
-        Thread.sleep(12000);
-        driver.findElement(By.xpath("//h4[contains(text(),'Hello World!')]"));
+        String txtHello = driver.findElement(By.xpath("//div[@id='finish']")).getText();
+        System.out.println(txtHello);
 
         //Đóng tab/window hiện tại của trình duyệt đang mở
         driver.close();
