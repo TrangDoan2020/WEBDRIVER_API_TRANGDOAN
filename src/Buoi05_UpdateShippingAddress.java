@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.Wait;
 import java.time.Duration;
 import java.util.List;
 
-public class Buoi05_UpdateInfo {
+public class Buoi05_UpdateShippingAddress {
     public static void main(String[] args)
     {
         String projectPath = System.getProperty("user.dir");
@@ -19,9 +19,9 @@ public class Buoi05_UpdateInfo {
 
         //Fluent Wait
         Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
-                .withTimeout(Duration.ofSeconds(20))
+                .withTimeout(Duration.ofSeconds(37))
                 .pollingEvery(Duration.ofSeconds(1))
-                .withMessage("Time out after 36 seconds")
+                .withMessage("Time out after 37 seconds")
                 .ignoring(NoSuchElementException.class);
 
         // Vào trang sendo.vn
@@ -65,8 +65,6 @@ public class Buoi05_UpdateInfo {
         //driver.findElement(By.xpath(("//button[starts-with(@class,'close')]"))).click();
         //WebElement eleClose = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[starts-with(@class,'close')]")));
         //eleClose.click();
-        String txtLogin = driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).getText();
-        System.out.println(txtLogin);
 
         //Nhấn vào tên user
         WebElement eleMenu = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@id='user_menu']")));
@@ -76,7 +74,20 @@ public class Buoi05_UpdateInfo {
         WebElement eleProfile = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
         eleProfile.click();
 
-        //Cập nhật Họ và tên đệm
+        //Nhấn vào menu Địa chỉ nhận hàng
+        //driver.findElement(By.xpath("//a[contains(text(),'Địa chỉ nhận hàng')]")).click();
+        //driver.findElement(By.xpath("//ul[starts-with(@class,'panelFirst')]//li[4]//a[1]"));
+        driver.findElement(By.linkText("Địa chỉ nhận hàng")).click();
+
+        //Nhấn vào icon Chỉnh sửa
+        //driver.findElement(By.xpath("//div[starts-with(@class,'addressList')]//div[1]//ul[1]//li[1]//button[1]")).click();
+        List<WebElement> btnEdits = driver.findElements(By.xpath("//button[contains(@class,'edit')]"));
+        if (btnEdits.size()>0)
+        {
+            btnEdits.get(0).click();
+        }
+
+        //Cập nhật Họ
         //driver.findElement(By.xpath(("//input[@name='firstName']"))).clear();
         driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.CONTROL + "a");
         driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.DELETE);
@@ -88,38 +99,39 @@ public class Buoi05_UpdateInfo {
         driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys(Keys.DELETE);
         driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys("Phạm");
 
-        //Cập nhật Giới tính
-        if (!driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).isSelected())
-        {
-            driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).click();
-        }
+        //Cập nhật Địa chỉ
+        driver.findElement(By.xpath("//input[@name='address']")).clear();
+        driver.findElement(By.xpath("//input[@name='address']")).sendKeys("Tòa nhà FPT KCX Tân Thuận, đường số 8");
 
-        //Cập nhật ngày sinh
-        WebElement eleCalendar = driver.findElement(By.xpath("//div[@class='DayPickerInput']"));
-        eleCalendar.click();
+        //Cập nhật Tỉnh/Thành
+        WebElement eleCity = driver.findElement(By.xpath("//select[@id='region']"));
+        Select drpCity = new Select(eleCity);
+        drpCity.selectByVisibleText("Hà Nội");
 
-        //JavascriptExecutor scroll = (JavascriptExecutor) driver;
-        //scroll.executeScript("arguments[0].scrollIntoView(true)", eleCalendar);
+        //Cập nhật Quận/Huyện
+        WebElement eleDistrict = driver.findElement(By.xpath("//select[@id='district']"));
+        Select drpDistrict = new Select(eleDistrict);
+        drpDistrict.selectByVisibleText("Quận Ba Đình");
 
-        WebElement eleMonth = driver.findElement(By.xpath("//select[@id='month']"));
-        Select drpMonth = new Select(eleMonth);
-        drpMonth.selectByVisibleText("Tháng 6");
+        //Cập nhật Phường/Xã
+        WebElement eleWard = driver.findElement(By.xpath("//select[@id='ward']"));
+        Select drpWard = new Select(eleWard);
+        drpWard.selectByVisibleText("Phường Nguyễn Trung Trực");
 
-        WebElement eleYear = driver.findElement(By.xpath("//select[@id='year']"));
-        Select drpYear = new Select(eleYear);
-        drpYear.selectByVisibleText("1980");
+        //Cập nhật SĐT
+        driver.findElement(By.xpath("//input[@name='phone']")).clear();
+        driver.findElement(By.xpath("//input[@name='phone']")).sendKeys("0909080808");
 
-        driver.findElement((By.xpath("//div[starts-with(@class,'DayPicker-Day') and text()='16']"))).click();
+        //Cập nhật bản đồ
 
-        //Nhấn button Cập nhật
-        driver.findElement(By.xpath(("//button[starts-with(@class,'userSubmit')]"))).click();
+
+        //Nhấn button Lưu thông tin
+        driver.findElement(By.xpath(("//button[starts-with(@class,'addressSubmit')]"))).click();
 
         //Đóng popup Cập nhật thành công
-        //driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).click();
-        String txtUpdateInfo = driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).getText();
-        System.out.println(txtUpdateInfo);
+        driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).click();
 
         // Đóng trình duyệt
-        //driver.close();
+        driver.close();
     }
 }
