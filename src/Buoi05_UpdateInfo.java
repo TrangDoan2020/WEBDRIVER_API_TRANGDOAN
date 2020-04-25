@@ -21,7 +21,7 @@ public class Buoi05_UpdateInfo {
         Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
                 .withTimeout(Duration.ofSeconds(20))
                 .pollingEvery(Duration.ofSeconds(1))
-                .withMessage("Time out after 36 seconds")
+                .withMessage("Time out after 20 seconds")
                 .ignoring(NoSuchElementException.class);
 
         // Vào trang sendo.vn
@@ -29,14 +29,14 @@ public class Buoi05_UpdateInfo {
 
         // Tắt popup "Ở nhà là nhất - 10K
         List<WebElement> btnClose1 =
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@class='modal-content']/button[starts-with(@class,'close')]")));
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='modal-content']/button[starts-with(@class,'close')]")));
         if (btnClose1.size()>0) {
             btnClose1.get(0).click();
         }
 
         // Tắt popup "Bật thông báo để không bỏ lỡ..."
         List<WebElement> btnClose2 =
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[starts-with(@class,'closeBtn')]")));
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//button[starts-with(@class,'closeBtn')]")));
         if (btnClose2.size()>0){
             btnClose2.get(0).click();
         }
@@ -46,7 +46,7 @@ public class Buoi05_UpdateInfo {
         btnLogin.click();
 
         // Click link "Đã có SendoID"
-        WebElement eleHaveSendoId = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Đã có SendoID']")));
+        WebElement eleHaveSendoId = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Đã có SendoID']")));
         eleHaveSendoId.click();
 
         // Nhập textbox Email
@@ -62,36 +62,37 @@ public class Buoi05_UpdateInfo {
         btnLogin2.click();
 
         //Tắt poup đăng nhập thành công
-        //driver.findElement(By.xpath(("//button[starts-with(@class,'close')]"))).click();
-        //WebElement eleClose = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[starts-with(@class,'close')]")));
-        //eleClose.click();
-        String txtLogin = driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).getText();
-        System.out.println(txtLogin);
+//        String message1 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[starts-with(@class,'toast')]/div/p"))).getText();
+//        System.out.println(message1);
 
         //Nhấn vào tên user
-        WebElement eleMenu = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@id='user_menu']")));
+        WebElement eleMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='user_menu']")));
         eleMenu.click();
 
         //Nhấn vào thông tin tài khoản
-        WebElement eleProfile = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
+        WebElement eleProfile = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
         eleProfile.click();
 
         //Cập nhật Họ và tên đệm
         //driver.findElement(By.xpath(("//input[@name='firstName']"))).clear();
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.CONTROL + "a");
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.DELETE);
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys("Cheng Cheng");
+        WebElement txtFirstName = driver.findElement(By.xpath("//input[@name='firstName']"));
+        txtFirstName.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
+        txtFirstName.sendKeys("Mi Hân");
 
         //Cập nhật Tên
         //driver.findElement(By.xpath(("//input[@name='lastName']"))).clear();
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys(Keys.CONTROL + "a");
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys(Keys.DELETE);
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys("Phạm");
+        WebElement txtLastName = driver.findElement(By.xpath("//input[@name='lastName']"));
+        txtLastName.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
+        txtLastName.sendKeys("Nguyễn");
 
         //Cập nhật Giới tính
-        if (!driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).isSelected())
-        {
-            driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).click();
+//        if (!driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).isSelected())
+//        {
+//            driver.findElement(By.xpath(("//label[contains(text(),'Nam')]/preceding-sibling::input"))).click();
+//        }
+        WebElement radNam = driver.findElement(By.xpath("//label[contains(text(),'Nam')]/preceding-sibling::input"));
+        if (radNam.isSelected()) {
+            radNam.click();
         }
 
         //Cập nhật ngày sinh
@@ -103,23 +104,25 @@ public class Buoi05_UpdateInfo {
 
         WebElement eleMonth = driver.findElement(By.xpath("//select[@id='month']"));
         Select drpMonth = new Select(eleMonth);
-        drpMonth.selectByVisibleText("Tháng 6");
+        drpMonth.selectByVisibleText("Tháng 10");
 
         WebElement eleYear = driver.findElement(By.xpath("//select[@id='year']"));
         Select drpYear = new Select(eleYear);
-        drpYear.selectByVisibleText("1980");
+        drpYear.selectByVisibleText("1981");
 
-        driver.findElement((By.xpath("//div[starts-with(@class,'DayPicker-Day') and text()='16']"))).click();
+        driver.findElement((By.xpath("//div[starts-with(@class,'DayPicker-Day') and text()='7']"))).click();
+
+        // Chờ calendar biến mất
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='DayPicker']")));
 
         //Nhấn button Cập nhật
         driver.findElement(By.xpath(("//button[starts-with(@class,'userSubmit')]"))).click();
 
-        //Đóng popup Cập nhật thành công
-        //driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).click();
-        String txtUpdateInfo = driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).getText();
-        System.out.println(txtUpdateInfo);
+        //Get text popup Cập nhật thành công
+        String message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[starts-with(@class,'toast')]/div/p"))).getText();
+        System.out.println(message);
 
         // Đóng trình duyệt
-        //driver.close();
+        driver.close();
     }
 }

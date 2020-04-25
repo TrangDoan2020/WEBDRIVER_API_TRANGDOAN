@@ -19,9 +19,9 @@ public class Buoi05_UpdateShippingAddress {
 
         //Fluent Wait
         Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
-                .withTimeout(Duration.ofSeconds(37))
+                .withTimeout(Duration.ofSeconds(20))
                 .pollingEvery(Duration.ofSeconds(1))
-                .withMessage("Time out after 37 seconds")
+                .withMessage("Time out after 20 seconds")
                 .ignoring(NoSuchElementException.class);
 
         // Vào trang sendo.vn
@@ -29,14 +29,14 @@ public class Buoi05_UpdateShippingAddress {
 
         // Tắt popup "Ở nhà là nhất - 10K
         List<WebElement> btnClose1 =
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@class='modal-content']/button[starts-with(@class,'close')]")));
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='modal-content']/button[starts-with(@class,'close')]")));
         if (btnClose1.size()>0) {
             btnClose1.get(0).click();
         }
 
         // Tắt popup "Bật thông báo để không bỏ lỡ..."
         List<WebElement> btnClose2 =
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//button[starts-with(@class,'closeBtn')]")));
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//button[starts-with(@class,'closeBtn')]")));
         if (btnClose2.size()>0){
             btnClose2.get(0).click();
         }
@@ -67,21 +67,18 @@ public class Buoi05_UpdateShippingAddress {
         //eleClose.click();
 
         //Nhấn vào tên user
-        WebElement eleMenu = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[@id='user_menu']")));
+        WebElement eleMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='user_menu']")));
         eleMenu.click();
 
         //Nhấn vào thông tin tài khoản
-        WebElement eleProfile = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
+        WebElement eleProfile = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
         eleProfile.click();
 
         //Nhấn vào menu Địa chỉ nhận hàng
-        //driver.findElement(By.xpath("//a[contains(text(),'Địa chỉ nhận hàng')]")).click();
-        //driver.findElement(By.xpath("//ul[starts-with(@class,'panelFirst')]//li[4]//a[1]"));
-        driver.findElement(By.linkText("Địa chỉ nhận hàng")).click();
+        driver.findElement(By.xpath("//a[text()='Địa chỉ nhận hàng']")).click();
 
         //Nhấn vào icon Chỉnh sửa
-        //driver.findElement(By.xpath("//div[starts-with(@class,'addressList')]//div[1]//ul[1]//li[1]//button[1]")).click();
-        List<WebElement> btnEdits = driver.findElements(By.xpath("//button[contains(@class,'edit')]"));
+        List<WebElement> btnEdits = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//button[contains(@class,'edit')]")));
         if (btnEdits.size()>0)
         {
             btnEdits.get(0).click();
@@ -89,19 +86,20 @@ public class Buoi05_UpdateShippingAddress {
 
         //Cập nhật Họ
         //driver.findElement(By.xpath(("//input[@name='firstName']"))).clear();
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.CONTROL + "a");
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys(Keys.DELETE);
-        driver.findElement(By.xpath(("//input[@name='firstName']"))).sendKeys("Cheng Cheng");
+        WebElement txtFirstName = driver.findElement(By.xpath("//input[@name='firstName']"));
+        txtFirstName.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
+        txtFirstName.sendKeys("Mi Hân");
 
         //Cập nhật Tên
         //driver.findElement(By.xpath(("//input[@name='lastName']"))).clear();
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys(Keys.CONTROL + "a");
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys(Keys.DELETE);
-        driver.findElement(By.xpath(("//input[@name='lastName']"))).sendKeys("Phạm");
+        WebElement txtLastName = driver.findElement(By.xpath(("//input[@name='lastName']")));
+        txtLastName.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
+        txtLastName.sendKeys("Nguyễn");
 
         //Cập nhật Địa chỉ
-        driver.findElement(By.xpath("//input[@name='address']")).clear();
-        driver.findElement(By.xpath("//input[@name='address']")).sendKeys("Tòa nhà FPT KCX Tân Thuận, đường số 8");
+        WebElement txtAddress = driver.findElement(By.xpath(("//input[@name='address']")));
+        txtAddress.sendKeys(Keys.CONTROL + "a", Keys.DELETE);
+        txtAddress.sendKeys("Tòa nhà FPT KCX Tân Thuận, đường số 8");
 
         //Cập nhật Tỉnh/Thành
         WebElement eleCity = driver.findElement(By.xpath("//select[@id='region']"));
@@ -128,8 +126,9 @@ public class Buoi05_UpdateShippingAddress {
         //Nhấn button Lưu thông tin
         driver.findElement(By.xpath(("//button[starts-with(@class,'addressSubmit')]"))).click();
 
-        //Đóng popup Cập nhật thành công
-        driver.findElement(By.xpath("//div[starts-with(@class,'toast')]/div/p")).click();
+        //Get content của popup
+        String message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[starts-with(@class,'toast')]/div/p"))).getText();
+        System.out.println(message);
 
         // Đóng trình duyệt
         driver.close();
