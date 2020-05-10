@@ -4,12 +4,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.util.List;
 
 public class Buoi05_UpdateInfo {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args)  {
         String projectPath = System.getProperty("user.dir");
         System.out.println(projectPath);
         System.setProperty("webdriver.chrome.driver", projectPath + "/drivers/chromedriver.exe");
@@ -73,6 +76,20 @@ public class Buoi05_UpdateInfo {
         WebElement eleProfile = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Thông tin tài khoản')]")));
         eleProfile.click();
 
+        //Cập nhật Avatar
+        //Nhấn vào Thay đổi
+        driver.findElement(By.xpath(("//button[contains(text(),'Thay đổi')]"))).click();
+
+        //Nhấn vào Chọn ảnh từ máy tính của bạn
+        driver.findElement(By.xpath(("//button[contains(text(),'Chọn ảnh từ máy của bạn')]"))).click();
+        //driver.findElement(By.xpath(("//div[contains(@class,'uploadPlaceText')]"))).click();
+
+        //Upload file
+        uploadFileWithRobot(projectPath + "\\images\\HoaDep.jpg");
+
+        //Nhấn button Đặt ảnh làm hồ sơ
+        driver.findElement(By.xpath("//button[starts-with(@class,'primary')]")).click();
+
         //Cập nhật Họ và tên đệm
         //driver.findElement(By.xpath(("//input[@name='firstName']"))).clear();
         WebElement txtFirstName = driver.findElement(By.xpath("//input[@name='firstName']"));
@@ -95,7 +112,7 @@ public class Buoi05_UpdateInfo {
             radNam.click();
         }
 
-        //Cập nhật ngày sinh
+        //Cập nhật Ngày sinh
         WebElement eleCalendar = driver.findElement(By.xpath("//div[@class='DayPickerInput']"));
         eleCalendar.click();
 
@@ -124,5 +141,36 @@ public class Buoi05_UpdateInfo {
 
         // Đóng trình duyệt
         driver.close();
+    }
+
+    public static void uploadFileWithRobot (String filePath) {
+        System.out.println(filePath);
+        try {
+            Thread.sleep(2000);
+            StringSelection stringSelection = new StringSelection(filePath);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+
+            Robot robot = null;
+
+            try {
+                robot = new Robot();
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+
+            robot.delay(250);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.delay(150);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+        } catch (Exception e) {
+
+        }
     }
 }
